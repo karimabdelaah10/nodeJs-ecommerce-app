@@ -10,15 +10,16 @@ const Router = require('./routes/api');
 // DATABASE CONNECTION
 dbConnection();
 
+// APP MIDDLEWARE
+app.use(express.json());
 if (env.APP_ENV === enums.DEVELOPMENT) {
   console.log('Development mode enabled');
   app.use(morgan('dev'));
 }
-// APP MIDDLEWARE
-app.use(express.json());
+
 app.listen(env.APP_PORT);
 console.log(`Server is running on http://localhost:${env.APP_PORT}`);       
 
 
 // App Routes
-app.use('/api', Router);
+app.use('/api/v1', Router);
