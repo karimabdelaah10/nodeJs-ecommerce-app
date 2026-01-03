@@ -4,25 +4,21 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const { enums } = require('./enums.js');
 const env = dotenv.config().parsed;
-const port = process.env.PORT || 4000;
+const dbConnection = require('./config/database');
+const Router = require('./routes/api');
 
-
-app.listen(port);
-console.log(`Server is running on http://localhost:${port}`);       
-
+// DATABASE CONNECTION
+dbConnection();
 
 if (env.APP_ENV === enums.DEVELOPMENT) {
   console.log('Development mode enabled');
   app.use(morgan('dev'));
 }
+// APP MIDDLEWARE
+app.use(express.json());
+app.listen(env.APP_PORT);
+console.log(`Server is running on http://localhost:${env.APP_PORT}`);       
 
 
-
-app.get('/', (req, res) => {
-  res.send('Hello World from Express!');
-});
-
-
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
+// App Routes
+app.use('/api', Router);
